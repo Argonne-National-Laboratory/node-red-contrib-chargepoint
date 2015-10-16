@@ -26,7 +26,8 @@ module.exports = function(RED) {
 	var node = this;
 	this.name = n.name;	
 	var chargepoint_username = node.credentials.username;
-        var chargepoint_password = node.credentials.password;
+    var chargepoint_password = node.credentials.password;
+    var options = {"hasTimeStamp": false};
 	var cpsgID = n.sgID;  //required
 	var cpstationID = n.stationID;  //optional
 	if (cpstationID){      	 	
@@ -45,7 +46,7 @@ module.exports = function(RED) {
              
                 if (client)
                 {
-		    client.setSecurity(new soap.WSSecurity(chargepoint_username,chargepoint_password,'PasswordText'));
+		    client.setSecurity(new soap.WSSecurity(chargepoint_username,chargepoint_password,options));
 		    node.status({fill:"yellow",shape:"dot",text:"Polling"});		
                     client.chargepointservices.chargepointservicesSOAP.getLoad(getLoad_args, function(err, result, raw, soapHeader)
 			{	
@@ -87,7 +88,8 @@ function shedLoad(n) {
 	var node = this;
 	this.name = n.name;	
 	var chargepoint_username = node.credentials.username;
-        var chargepoint_password = node.credentials.password;
+    var chargepoint_password = node.credentials.password;
+    var options = {"hasTimeStamp": false};
 	/****sgData****/
 	var cpsgID = n.sgID;   //required
 	var cpstationID = n.stationID; //optional 
@@ -129,7 +131,7 @@ function shedLoad(n) {
                 if (client)
                 {
 		  //console.log("retrieve", client.describe().chargepointservices.chargepointservicesSOAP.shedLoad);
-		    client.setSecurity(new soap.WSSecurity(chargepoint_username,chargepoint_password,'PasswordText'));
+		    client.setSecurity(new soap.WSSecurity(chargepoint_username,chargepoint_password,options));
 		    node.status({fill:"yellow",shape:"dot",text:"Polling"});		
                     client.chargepointservices.chargepointservicesSOAP.shedLoad(shedLoad_args, function(err, result, raw, soapHeader)
 			{	
@@ -171,7 +173,8 @@ function shedLoad(n) {
 	var node = this;
 	this.name = n.name;	
 	var chargepoint_username = node.credentials.username;
-        var chargepoint_password = node.credentials.password;
+    var chargepoint_password = node.credentials.password;
+    var options = {"hasTimeStamp": false};
 	var cpsgID = n.sgID;  //required
 	var cpstationID = n.stationID;  //optional
 	if (cpstationID){      	 	
@@ -190,7 +193,7 @@ function shedLoad(n) {
              
                 if (client)
                 {
-		    client.setSecurity(new soap.WSSecurity(chargepoint_username,chargepoint_password,'PasswordText'));
+		    client.setSecurity(new soap.WSSecurity(chargepoint_username,chargepoint_password,options));
 		    node.status({fill:"yellow",shape:"dot",text:"Requesting"});		
                     client.chargepointservices.chargepointservicesSOAP.clearShedState(clearShedState_args, function(err, result, raw, soapHeader)
 			{	
@@ -231,7 +234,8 @@ function shedLoad(n) {
 	var node = this;
 	this.name = n.name;	
 	var chargepoint_username = node.credentials.username;
-        var chargepoint_password = node.credentials.password;	
+    var chargepoint_password = node.credentials.password;
+    var options = {"hasTimeStamp": false};	
 	var cpstationID = n.stationID;  //optional
 	var getStations_args = {};
 	if (cpstationID){	    	 	
@@ -248,7 +252,7 @@ function shedLoad(n) {
              
                 if (client)
                 {
-		    client.setSecurity(new soap.WSSecurity(chargepoint_username,chargepoint_password,'PasswordText'));
+		    client.setSecurity(new soap.WSSecurity(chargepoint_username,chargepoint_password,options));
 		    node.status({fill:"yellow",shape:"dot",text:"Requesting"});		
 		    //console.log(client.describe());
 		    //console.log("retrieve", client.describe().chargepointservices.chargepointservicesSOAP.getStations);
