@@ -1,0 +1,37 @@
+{
+  "name": "node-red-contrib-chargepoint",
+  "version": "0.0.1",
+  "description": "Node-RED nodes for monitoring and performing PEV load control with ChargePoint EVSE",  
+  "dependencies": {
+    "request": "^2.57.0",
+    "soap": "^0.9.5"
+  },
+  "keywords": [
+    "ChargePoint",
+    "PEV",
+    "EVSE",
+    "electric",
+    "vehicle",    
+    "supply",
+    "equipment"
+  ],
+  "node-red": {
+    "nodes": {
+      "chargepoint": "chargepoint/chargepoint.js"
+    }
+  },
+  "main": "chargepoint/chargepoint.js",   
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Argonne-National-Laboratory/node-red-contrib-chargepoint.git"
+  },  
+  "author": "Jason D. Harper",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/Argonne-National-Laboratory/node-red-contrib-chargepoint/issues"
+  },
+  "homepage": "https://github.com/Argonne-National-Laboratory/node-red-contrib-chargepoint#readme"
+}

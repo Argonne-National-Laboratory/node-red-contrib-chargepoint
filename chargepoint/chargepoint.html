@@ -1,0 +1,247 @@
+<!--
+  Copyright 2015 Argonne National Laboratory.
+
+  Licensed under the the BSD 3-Clause License (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://opensource.org/licenses/BSD-3-Clause
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ -->
+ 
+<script type="text/x-red" data-template-name="getLoad">
+	 <div class="form-row">
+        <label for="node-input-username"><i class="fa fa-user"></i> ChargePoint API Username</label>
+        <input type="text" id="node-input-username">
+    </div>
+    <div class="form-row">
+        <label for="node-input-password"><i class="fa fa-lock"></i> ChargePoint API Password</label>
+        <input type="password" id="node-input-password">
+    </div>     
+    <div class="form-row">
+		  <label for="node-input-sgID"><i class="fa fa-info"></i> sgID</label>
+        <input type="text" id="node-input-sgID" placeholder="Custom Station Group identifier (Req)">
+    </div>
+	 <div class="form-row">
+		  <label for="node-input-stationID"><i class="fa fa-info"></i> stationID</label>
+        <input type="text" id="node-input-stationID" placeholder="Station ID (optional)">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>  
+	 
+</script>
+
+<script type="text/x-red" data-help-name="getLoad">
+    <p>Use this node to retrieve the load and shed state for a single station or custom station group. </p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('getLoad',{
+        category: 'ChargePoint',
+        color:"#FDD0A2",
+        defaults: {
+            name: {value:""}, 
+            sgID: {value:"",required:true},
+            stationID: {value:"",required:false},  				        
+        },
+        credentials: {
+            username: {type:"text"},
+            password: {type:"password"}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "chargepoint.png",
+        label: function() {
+            return this.name||"getLoad";
+        },
+        labelStyle: function() {
+            return this.name?"node_label_italic":"";
+        }
+    });
+</script>
+<script type="text/x-red" data-template-name="shedLoad">
+	 <div class="form-row">
+        <label for="node-input-username"><i class="fa fa-user"></i> ChargePoint API Username</label>
+        <input type="text" id="node-input-username">
+    </div>
+    <div class="form-row">
+        <label for="node-input-password"><i class="fa fa-lock"></i> ChargePoint API Password</label>
+        <input type="password" id="node-input-password">
+    </div>     
+    <div class="form-row">
+		  <label for="node-input-sgID"><i class="fa fa-info"></i> sgID</label>
+        <input type="text" id="node-input-sgID" placeholder="Custom Station Group identifier (Req)">
+    </div>
+	 <div class="form-row">
+		  <label for="node-input-stationID"><i class="fa fa-info"></i> stationID</label>
+        <input type="text" id="node-input-stationID" placeholder="Station ID (optional)">
+    </div>
+    <div class="form-row">
+		  <label for="node-input-allowedLoad"><i class="fa fa-info"></i> allowedLoad</label>
+        <input type="text" id="node-input-allowedLoad" placeholder="Allowed Load (kW) (optional)">
+    </div>
+    <div class="form-row">
+		  <label for="node-input-percentShed"><i class="fa fa-info"></i> percentShed</label>
+        <input type="text" id="node-input-percentShed" placeholder="% of Current Load to Shed (0-100) (optional)">
+    </div>
+    <div class="form-row">
+		  <label for="node-input-timeInterval"><i class="fa fa-info"></i> timeInterval</label>
+        <input type="text" id="node-input-timeInterval" placeholder="Duration of Shed (minutes) (optional)">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>  
+	 
+</script>
+
+<script type="text/x-red" data-help-name="shedLoad">
+    <p>Load shedding may be performed in one of the following modes:</p>
+	 <ul><li>percentShed – Percentage of a station’s present power output to be shed</li>
+	 <li>allowedLoad – Absolute maximum allowable load in kW</li></ul>
+
+	 <p>This node can also take an allowedLoad value passed in as <b>msg.allowedLoad</b>.</p>
+	 <p>This node can also take a percentShed value passed in as <b>msg.percentShed</b>.</p>
+
+    <p>Use this call to shed load for a single station or group of stations. Shedding is performed by specifying either the percentage of the station’s present power output using the percentShed parameter, or by setting an absolute maximum allowable load (in kW) for a specified time period using the allowedLoad parameter. Subsequent calls will overwrite previous values if you use the same mode (allowedLoad vs. percentShed). If you use a different mode before the shed state is cleared using the clearShedState Node, the 
+call is ignored.</p> 
+	 <p>Note that if the percentShed parameter is used on a subsequent call it will operate on the power measured when the first call to shedLoad was made. For example, if a station is delivering 10kW, and a call is made to shed 30%, it will drop to 7kW. If a subsequent call is then made to shed 50%, the station will drop to 5kW (not 3.5kW).  In contrast the allowedLoad parameter sets the absolute maximum.</p>
+	 <p><b>Note</b>:If you use the shedLoad Node with the percentShed parameter on a station that is not delivering any power, the maximum output is set to 0 kW, and charging will not be allowed on that station until the shed period ends or a call to utilizing the clearShedState Node is made.</p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('shedLoad',{
+        category: 'ChargePoint',
+        color:"#FDD0A2",
+        defaults: {
+            name: {value:""}, 
+            sgID: {value:"",required:true},
+            stationID: {value:"",required:false},
+			 	allowedLoad: {value:"",required:false},  	
+				percentShed: {value:"",required:false},	
+				timeInterval: {value:"",required:false},		        
+        },
+        credentials: {
+            username: {type:"text"},
+            password: {type:"password"}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "chargepoint.png",
+        label: function() {
+            return this.name||"shedLoad";
+        },
+        labelStyle: function() {
+            return this.name?"node_label_italic":"";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="clearShedState">
+	 <div class="form-row">
+        <label for="node-input-username"><i class="fa fa-user"></i> ChargePoint API Username</label>
+        <input type="text" id="node-input-username">
+    </div>
+    <div class="form-row">
+        <label for="node-input-password"><i class="fa fa-lock"></i> ChargePoint API Password</label>
+        <input type="password" id="node-input-password">
+    </div>     
+    <div class="form-row">
+		  <label for="node-input-sgID"><i class="fa fa-info"></i> sgID</label>
+        <input type="text" id="node-input-sgID" placeholder="Custom Station Group identifier (Req)">
+    </div>
+	 <div class="form-row">
+		  <label for="node-input-stationID"><i class="fa fa-info"></i> stationID</label>
+        <input type="text" id="node-input-stationID" placeholder="Station ID (optional)">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>  
+	 
+</script>
+
+<script type="text/x-red" data-help-name="clearShedState">
+    <p>Use this node to clear the shed state from a single station or group of stations. </p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('clearShedState',{
+        category: 'ChargePoint',
+        color:"#FDD0A2",
+        defaults: {
+            name: {value:""}, 
+            sgID: {value:"",required:true},
+            stationID: {value:"",required:false},  				        
+        },
+        credentials: {
+            username: {type:"text"},
+            password: {type:"password"}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "chargepoint.png",
+        label: function() {
+            return this.name||"clearShedState";
+        },
+        labelStyle: function() {
+            return this.name?"node_label_italic":"";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="getStations">
+	 <div class="form-row">
+        <label for="node-input-username"><i class="fa fa-user"></i> ChargePoint API Username</label>
+        <input type="text" id="node-input-username">
+    </div>
+    <div class="form-row">
+        <label for="node-input-password"><i class="fa fa-lock"></i> ChargePoint API Password</label>
+        <input type="password" id="node-input-password">
+    </div>  
+	 <div class="form-row">
+		  <label for="node-input-stationID"><i class="fa fa-info"></i> stationID</label>
+        <input type="text" id="node-input-stationID" placeholder="Station ID (optional)">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>  
+	 
+</script>
+
+<script type="text/x-red" data-help-name="getStations">
+    <p>Use this node to return a list of stations.  This will not return stations that you don’t have access rights to. For example, it will not return a public station unless 
+you either own the station or have been granted rights by the station’s owner. </p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('getStations',{
+        category: 'ChargePoint',
+        color:"#FDD0A2",
+        defaults: {
+            name: {value:""},             
+            stationID: {value:"",required:false},  				        
+        },
+        credentials: {
+            username: {type:"text"},
+            password: {type:"password"}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "chargepoint.png",
+        label: function() {
+            return this.name||"getStations";
+        },
+        labelStyle: function() {
+            return this.name?"node_label_italic":"";
+        }
+    });
+</script>
