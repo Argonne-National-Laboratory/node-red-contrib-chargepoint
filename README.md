@@ -1,6 +1,8 @@
 node-red-contrib-chargepoint
 ========================
 
+[![NPM](https://nodei.co/npm/node-red-contrib-chargepoint.png)](https://nodei.co/npm/node-red-contrib-chargepoint/)
+
 [Node-Red][4] nodes for communicating with the EVSP [ChargePoint][1] allowing monitoring of Chargepoint EVSE and load control.  
 
 Based on the [ChargePoint 4.1 API][2] utilizing the [4.1 WSDL][3].
