@@ -1,12 +1,13 @@
 {
   "name": "node-red-contrib-chargepoint",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Node-RED nodes for monitoring and performing PEV load control with ChargePoint EVSE",  
   "dependencies": {
     "request": "^2.57.0",
     "soap": "^0.9.5"
   },
   "keywords": [
+    "node-red",
     "ChargePoint",
     "PEV",
     "EVSE",
