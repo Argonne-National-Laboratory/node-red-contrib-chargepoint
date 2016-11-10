@@ -74,7 +74,7 @@ module.exports = function(RED)
 	}
 
 	RED.nodes.registerType("getLoad",getLoad,{
-		redentials: {
+		credentials: {
 		username: {type:"text"},
 		password: {type: "password"}
 		}
