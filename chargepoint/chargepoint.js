@@ -14,9 +14,7 @@
  * limitations under the License.
  **/
 
-module.exports = function(RED) {
-    //"use strict";
-    var RED = require(process.env.NODE_RED_HOME+"/red/red");
+module.exports = function(RED) {        
     var settings = RED.settings;
     var soap     = require('soap');    
     var url = "https://webservices.chargepoint.com/cp_api_4.1.wsdl"; // URL for ChargePoint wsdl     
@@ -51,14 +49,11 @@ module.exports = function(RED) {
                     client.chargepointservices.chargepointservicesSOAP.getLoad(getLoad_args, function(err, result, raw, soapHeader)
 			{	
 			  if(err) {
-			  node.status({fill:"red",shape:"dot",text:"Error"});
-			  console.log(err); 
+			  node.status({fill:"red",shape:"dot",text:"Error"});			  
 			  node.error('ChargePoint ' + err);			  
 			  }
 			  else if(result)
 			  {			  
-			   //console.log(client.lastRequest);		    
-  			   //console.log(result);
 			   node.status({fill:"grey",shape:"dot",text:"Finished"});
 			   if(result.responseCode != "100"){
 			   node.warn(result);
@@ -66,7 +61,6 @@ module.exports = function(RED) {
 			   else {
 			   outmsg.payload = result;
 			   node.send(outmsg);
-			   //console.log(outmsg);
 			   }
 			  }			  
 			});                    
@@ -124,34 +118,28 @@ function shedLoad(n) {
 		  shedLoad_args['sgLoadData'] = {percentShed: parseFloat(cppercentShed)};
 		}
 		shedLoad_args['timeInterval'] = parseInt(cptimeInterval);		
-		//console.log('after:', shedLoad_args);
 
             soap.createClient(url, function(err, client) {                                
              
                 if (client)
                 {
-		  //console.log("retrieve", client.describe().chargepointservices.chargepointservicesSOAP.shedLoad);
 		    client.setSecurity(new soap.WSSecurity(chargepoint_username,chargepoint_password,options));
 		    node.status({fill:"yellow",shape:"dot",text:"Polling"});		
                     client.chargepointservices.chargepointservicesSOAP.shedLoad(shedLoad_args, function(err, result, raw, soapHeader)
 			{	
 			  if(err) {
-			  node.status({fill:"red",shape:"dot",text:"Error"});
-			  console.log(err); 
+			  node.status({fill:"red",shape:"dot",text:"Error"});			  
 			  node.error('ChargePoint ' + err);			  
 			  }
 			  else if(result)
-			  {			  
-			   //console.log(client.lastRequest);		    
-  			   //console.log(result);
+			  {			
 			   node.status({fill:"grey",shape:"dot",text:"Finished"});
 			   if(result.responseCode != "100"){
 			   node.warn(result);
 			   }
 			   else {
 			   outmsg.payload = result;
-			   node.send(outmsg);
-			   //console.log(outmsg);
+			   node.send(outmsg);			   
 			   }
 			  }			  
 			});                   
@@ -198,14 +186,11 @@ function shedLoad(n) {
                     client.chargepointservices.chargepointservicesSOAP.clearShedState(clearShedState_args, function(err, result, raw, soapHeader)
 			{	
 			  if(err) {
-			  node.status({fill:"red",shape:"dot",text:"Error"});
-			  console.log(err); 
+			  node.status({fill:"red",shape:"dot",text:"Error"});			  
 			  node.error('ChargePoint ' + err);			  
 			  }
 			  else if(result)
-			  {			  
-			   //console.log(client.lastRequest);		    
-  			   //console.log(result);
+			  {		  
 			   node.status({fill:"grey",shape:"dot",text:"Finished"});
 			   if(result.responseCode != "100"){
 			   node.warn(result);
@@ -213,7 +198,6 @@ function shedLoad(n) {
 			   else {
 			   outmsg.payload = result;
 			   node.send(outmsg);
-		           //console.log(outmsg);
 			   }
 			  }			  
 			});                    
@@ -253,20 +237,15 @@ function shedLoad(n) {
                 if (client)
                 {
 		    client.setSecurity(new soap.WSSecurity(chargepoint_username,chargepoint_password,options));
-		    node.status({fill:"yellow",shape:"dot",text:"Requesting"});		
-		    //console.log(client.describe());
-		    //console.log("retrieve", client.describe().chargepointservices.chargepointservicesSOAP.getStations);
+		    node.status({fill:"yellow",shape:"dot",text:"Requesting"});
                     client.chargepointservices.chargepointservicesSOAP.getStations(getStations_args, function(err, result, raw, soapHeader)
 			{	
 			  if(err) {
 			  node.status({fill:"red",shape:"dot",text:"Error"});
-			  console.log(err); 
 			  node.error('ChargePoint ' + err);			  
 			  }
 			  else if(result)
 			  {			  
-			   //console.log(client.lastRequest);		    
-  			   //console.log(result);
 			   node.status({fill:"grey",shape:"dot",text:"Finished"});
 			   if(result.responseCode != "100"){
 			   node.warn(result);
